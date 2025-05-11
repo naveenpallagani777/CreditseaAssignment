@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState<string | null>(localStorage.getItem('role'));
+  const [role] = useState<string | null>(localStorage.getItem('role'));
 
   useEffect(() => {
     const token = Cookies.get('token');
