@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const axiosLoanManagerInstance = axios.create({
-  baseURL: "http://127.0.0.1:5000/",
+  baseURL: "https://creditsea-assignment-naveenpallagani777s-projects.vercel.app/",
   headers: {
     "Content-Type": "application/json",
   },
