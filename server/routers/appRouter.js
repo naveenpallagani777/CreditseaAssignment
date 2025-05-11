@@ -10,6 +10,8 @@ router.post('/login', authController.login);
 
 router.post('/api/loans', authenticate, loanController.submitLoan);
 router.get('/api/loans', authenticate, loanController.getAllLoans);
+router.put('/api/loans/:userId/:loanId', authenticate, loanController.updateLoanStatus);
+
 router.get('/user/loans', authenticateUser, loanController.getUserLoans);
 
 module.exports = router;

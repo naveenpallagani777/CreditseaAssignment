@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
           Cookies.remove('token');
           window.location.href = '/login';
         }}
-          className="flex items-center p-4 hover:bg-green-700 transition-colors duration-200"
+          className="flex gap-3 items-center p-4 hover:bg-green-700 transition-colors duration-200"
         >
           <FaSignOutAlt />
           Sign Out

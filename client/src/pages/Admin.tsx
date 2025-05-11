@@ -43,10 +43,12 @@ ChartJS.register(
 
 // Main Dashboard Component
 interface LoanData {
+	userId: string;
+	id: string;
 	purpose: string;
 	fullName: string;
 	date: string;
-	status: 'PENDING' | 'VERIFIED';
+	status: 'pending' | 'verified' | 'rejected' | 'approved';
 }
 
 const Admin: React.FC = () => {
@@ -58,12 +60,13 @@ const Admin: React.FC = () => {
 			const data = await apiGet('/api/loans');
 			console.log('Loans fetched:', data);
 			let loanData = data.map((loan: any) => ({
-				id: loan.id,
+				id: loan._id,
 				fullName: loan.fullName,
 				amount: loan.loanAmount,
 				date: new Date(loan.createdAt).toLocaleDateString(),
 				status: loan.status,
 				purpose: loan.purpose,
+				userId: loan.userId,
 			}));
 			setLoans(loanData);
 		} catch (error) {
@@ -99,7 +102,7 @@ const Admin: React.FC = () => {
 					</div>
 
 					{/* Applied Loans Table */}
-					<AppliedLoansTable data={loans} />
+					<AppliedLoansTable data={loans} fetchLoans={fetchLoans} />
 
 					{/* Loans Released Chart */}
 					<div className="mt-6">

@@ -72,3 +72,48 @@ exports.getUserLoans = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+// PUT /api/loans/:userId/:loanId - Update loan status (only by 'verifier' or 'admin')
+exports.updateLoanStatus = async (req, res) => {
+  const currentUserId = req.user.id;
+  const currentUserRole = req.user.role;
+
+  const { userId, loanId } = req.params;
+  const { status } = req.body;
+
+  const validStatuses = ['pending', 'verified', 'approved', 'rejected'];
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ error: 'Invalid loan status' });
+  }
+
+  // Restrict verifiers from setting status to 'approved'
+  if (currentUserRole === 'verifier' && status === 'approved') {
+    return res.status(403).json({ error: 'Verifiers are not allowed to approve loans' });
+  }
+
+  if (!['admin', 'verifier'].includes(currentUserRole)) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const loan = user.loanApplications.id(loanId);
+    if (!loan) {
+      return res.status(404).json({ error: 'Loan application not found' });
+    }
+
+    loan.status = status;
+    loan.updatedAt = new Date();
+
+    await user.save();
+
+    return res.status(200).json({ message: 'Loan status updated successfully', loan });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};

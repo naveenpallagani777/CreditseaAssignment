@@ -7,7 +7,6 @@ const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    role: 'user',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -18,13 +17,13 @@ const Signup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      let data = await apiPost('/login', { ...formData, role: formData.role });
+      let data = await apiPost('/login', { ...formData });
       alert('Login successful!');
       console.log(data.user);
       localStorage.setItem('role', data?.user?.role);
       Cookies.set('token', data?.token, { expires: 24 });
       window.location.href = '/';
-      setFormData({ username: '', password: '', role: '' });
+      setFormData({ username: '', password: '' });
     } catch (error) {
       alert('Login failed. Please try again.');
     }
@@ -83,7 +82,7 @@ const Signup: React.FC = () => {
           </div>
 
           {/* Role */}
-          <div className="relative">
+          {/* <div className="relative">
             <select
               id="role"
               name="role"
@@ -110,7 +109,7 @@ const Signup: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-          </div>
+          </div> */}
 
           <button
             type="submit"
